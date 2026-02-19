@@ -128,6 +128,20 @@ def convert_smiles_post(body: SmilesRequest):
     )
 
 
+@app.post(
+    "/convertSTR",
+    summary="Convert SMILES to 3D SDF string (POST)",
+)
+def convert_str_smiles_post(body: SmilesRequest):
+    """Accept a SMILES string and return the 3D SDF content as a string."""
+    try:
+        sdf_content = smiles_to_3d_sdf(body.smiles)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    return {"sdf": sdf_content}
+
+
 @app.get(
     "/info",
     response_model=MoleculeInfo,
